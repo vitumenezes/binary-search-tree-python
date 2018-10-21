@@ -23,10 +23,12 @@ def insert(root, node):
                     insert(root.left, node)
 
 
+#in order traversal
+#prints all values
 def inorder(root):
     if root:
         inorder(root.left)
-        print(root.data, end=' ')
+        print(root.data)
         inorder(root.right)
 
 
@@ -49,42 +51,56 @@ def enesimo_elemento(root, index):
     current = root
     s = []
     done = 0
-    index_cont = 1
+    index_cont = 0
+    aux = None
 
-    while(not done):
-        if index_cont == index:
-            current = s.pop()
-            return current.data
-            break
+    while not done and index_cont != index:
 
         if current is not None:
             s.append(current)
             current = current.left
         else:
-            if(len(s) >0 ):
-                current = s.pop()
-                current = current.right
+            if(len(s) > 0):
+                index_cont += 1
+                print(index_cont, index)
+                aux = s.pop()
+                current = aux.right
             else:
                 done = 1
 
-        index_cont += 1
+    return aux.data
+
+#returns the index of element informed
+def posicao(root, position):
+        current = root
+        s = []
+        done = 0
+
+        while(not done):
+            if current is not None:
+                s.append(current)
+                current = current.left
+            else:
+                if(len(s) > 0):
+                    current = s.pop()
+                    current = current.right
+                else:
+                    done = 1
 
 
 if __name__ == "__main__":
     root = Node(10)
 
-    insert(root, Node(20))
     insert(root, Node(30))
+    insert(root, Node(20))
     insert(root, Node(40))
-    insert(root, Node(50))
-    insert(root, Node(2))
-    insert(root, Node(3))
     insert(root, Node(5))
     insert(root, Node(4))
+    insert(root, Node(6))
 
-    print(search(root, 3))
-    print(search(root, 4))
-    print(search(root, 1))
+    # print(search(root, 3))
+    # print(search(root, 4))
+    # print(search(root, 1))
 
-    print(enesimo_elemento(root, 4))
     inorder(root)
+    print(enesimo_elemento(root, 3))
