@@ -11,21 +11,26 @@ class Node:
 
 #inserts a value into tree
 def insert(root, node):
-    if root.data < node.data:
+    exists = True
+    if root.data == node.data:
+        print 'Duplicated value ' + str(root.data)
+        return False
+    elif root.data < node.data:
         if root.right is None:
             root.right = node
             node.parent = root
         else:
-            insert(root.right, node)
-        root.right_nodes += 1
+            exists = insert(root.right, node)
+        if exists: root.right_nodes += 1
+        return exists
     else:
         if root.left is None:
             root.left = node
             node.parent = root
         else:
-            insert(root.left, node)
-        root.left_nodes += 1
-
+            exists = insert(root.left, node)
+        if exists: root.left_nodes += 1
+        return exists
 
 #in order traversal
 #prints all values
@@ -121,13 +126,16 @@ if __name__ == "__main__":
     insert(root, Node(7))
     insert(root, Node(9))
     insert(root, Node(3))
-    # insert(root, Node(5))
+    insert(root, Node(5))
+    insert(root, Node(5))
+    insert(root, Node(3))
 
     # print(search(root, 3))
     # print(search(root, 4))
     # print(search(root, 1))
 
-    inorder(root)
-    print(enesimo_elemento(root, 3))
-    print(posicao(root, 4))
-    print(root.right_nodes)
+    # inorder(root)
+    # print 'Elemento na posicao 3: ' + str(enesimo_elemento(root, 3))
+    # print 'Posicao do elemento 41: ' + str(posicao(root, 41))
+    # print(root.right_nodes)
+    # print(root.left_nodes)
