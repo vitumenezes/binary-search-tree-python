@@ -54,15 +54,14 @@ def enesimo_elemento(root, index):
     index_cont = 0
     aux = None
 
-    while not done and index_cont != index:
+    while not done and index > 0:
 
         if current is not None:
             s.append(current)
             current = current.left
         else:
             if(len(s) > 0):
-                index_cont += 1
-                print(index_cont, index)
+                index -= 1
                 aux = s.pop()
                 current = aux.right
             else:
@@ -104,3 +103,5 @@ if __name__ == "__main__":
 
     inorder(root)
     print(enesimo_elemento(root, 3))
+    print(enesimo_elemento(root, 2))
+    print(enesimo_elemento(root, 1))
