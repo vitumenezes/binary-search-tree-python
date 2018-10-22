@@ -8,17 +8,17 @@ class Node:
         self.data = key
 
 
-def insert(root, node):
+def insira(root, node):
     exists = True
     if root.data == node.data:
-        print('Duplicated value ' + str(root.data))
+        raise(f'Valor duplicado: {root.data}')
         return False
     elif root.data < node.data:
         if root.right is None:
             root.right = node
             node.parent = root
         else:
-            exists = insert(root.right, node)
+            exists = insira(root.right, node)
         if exists: root.right_nodes += 1
         return exists
     else:
@@ -26,7 +26,7 @@ def insert(root, node):
             root.left = node
             node.parent = root
         else:
-            exists = insert(root.left, node)
+            exists = insira(root.left, node)
         if exists: root.left_nodes += 1
         return exists
 
@@ -78,7 +78,7 @@ def posicao(x):
 
     while cur:
         if not prev or prev == cur.right:
-          index += 1 + (0 if not cur.left else count_node(cur.left))
+            index += 1 + (0 if not cur.left else count_node(cur.left))
 
         prev = cur
         cur = cur.parent
@@ -88,12 +88,13 @@ def posicao(x):
 
 def mediana(root):
     size = count_node(root)
+    med = 0
     if size % 2 == 0:
-        size = size / 2
+        med = size // 2
     else:
-        size = (size // 2) + 1
+        med = (size // 2) + 1
 
-    return enesimo_elemento(root, size).data
+    return enesimo_elemento(root, med).data
 
 
 def eh_cheia(root):
@@ -130,53 +131,48 @@ def to_string(root):
     print("")
 
 
+def inserir(root, nodes):
+    for node in nodes:
+        insira(root, node)
+
+
 if __name__ == "__main__":
-    # root = Node(10)
-    #
-    # node_t = Node(5)
-    #
-    # insert(root, node_t)
-    # insert(root, Node(20))
-    # insert(root, Node(11))
-    # insert(root, Node(30))
-    # insert(root, Node(40))
-    # insert(root, Node(4))
-    # insert(root, Node(6))
+    inputs = open("input.txt", "r")
+    values = list(map(int, inputs.readline().split(' ')))
+    root = Node(values.pop(0))
 
-    # print(search(root, 3))
-    # print(search(root, 4))
-    # print(search(root, 1))
+    commands = open("commands.txt", "r")
+    for index, command in enumerate(commands):
+        command_, argument = command.replace('\n', ' ').split(' ', 1)
+        print(f'Comando: {command_} - Argumento(s): {argument}')
 
-    # print(enesimo_elemento(root, 4))
-    # print('----')
-    # inorder(root)
-    # print('----')
-    # print(query(2, root).data)
-    # print('----')
-    # print(count_node(root))
-    # print('----')
-    # print(find_by_index(root, 4).data)
-    # print('----')
-    # size = count_node(root)
-    # med = 0
-    # if size % 2 == 0:
-    #     med = size / 2
-    # else:
-    #     med = (size // 2) + 1
+        nodes = [Node(value) for value in values]
+        if index == 0 and command != 'INSIRA':
+            inserir(root, nodes)
 
+        if command_ == 'ENESIMO':
+            print(f'Elemento na posição {argument} -> {enesimo_elemento(root, int(argument)).data}')
 
-    # print('------')
-    # inorder(root)
-    # print_level_order(root)
-    # h = get_height(root)
-    # print(h)
-    # print(size)
+        elif command_ == 'POSICAO':
+            node_posicao = [node for node in nodes if node.data == int(argument)]
+            print(f'Posição do elemento {argument} -> {posicao(node_posicao[0])}')
 
-    # print((2 ** h) - 1)
+        elif command_ == 'MEDIANA':
+            print(f'Elemento da posição mediana -> {mediana(root)}')
 
-    # print((2 ** (h - 1)) <= size <= ((2 ** h) - 1))
-    # print(size == ((2 ** h) - 1))
+        elif command_ == 'CHEIA':
+            print(f'Árvore é cheia? -> {eh_cheia(root)}')
 
-    # print(size)
-    # print(find_by_index(root, size).data)
-    # print(get_index(node_t))
+        elif command_ == 'COMPLETA':
+            print(f'Árvore é completa? -> {eh_completa(root)}')
+
+        elif command_ == 'IMPRIMA':
+            print('Valores da árvore por níveis:')
+            to_string(root)
+
+        elif command_ == 'INSIRA':
+            inserir(root, values)
+            print('Os valores foram adicionados!')
+
+        else:
+            print('Nenhum comando correspondente encontrado!')
