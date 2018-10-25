@@ -1,3 +1,5 @@
+import sys
+
 class Node:
     def __init__(self, key):
         self.left = None
@@ -11,7 +13,7 @@ class Node:
 def insira(root, node):
     exists = True
     if root.data == node.data:
-        print(f'Valor duplicado: {root.data}')
+        print(f'>>> ERRO: O valor {node.data} não pôde ser adicionado pois já existe na árvore.')
         return False
 
     elif root.data < node.data:
@@ -161,24 +163,42 @@ def inserir(root, nodes):
 
 
 if __name__ == "__main__":
-    inputs = open("input.txt", "r")
+    if len(sys.argv) < 3:
+        print("Número inválido de argumentos!")
+        exit()
+
+    inputs = open(sys.argv[1], "r")
+
+    #checks if the first entry are the values to insert on tree
+    string = str(inputs.readline().split(' ')[0])
+    if not string.isdigit():
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERRO <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        print("O primeiro arquivo deve conter os valores a serem inseridos na árvore.\nVerifique a entrada!")
+        exit()
+
+    #returns to the beginning of the buffer
+    inputs.seek(0)
+
+    #reads all the values
     values = list(map(int, inputs.readline().split(' ')))
     root = Node(values.pop(0))
-
     nodes = [Node(value) for value in values]
-    inserir(root, nodes)
 
-    commands = open("commands.txt", "r")
+    #inserts all the values on the tree
+    inserir(root, nodes)
+    print()
+
+    commands = open(sys.argv[2], "r")
     for index, command in enumerate(commands):
         command_, argument = command.replace('\n', ' ').split(' ', 1)
-        print(f'COMANDO: {command_} - Argumento(s): {argument}')
+        print(f'============ COMANDO: {command_} - Argumento(s): {argument}=============')
 
         if command_ == 'ENESIMO':
             no = enesimo_elemento(root, int(argument))
             if no:
                 print(f'Elemento na posição {argument} -> {no.data}')
             else:
-                print(f'ERRO: A arvore não possui um {argument}° elemento')
+                print(f'>>> ERRO: A arvore não possui um {argument}° elemento')
 
         elif command_ == 'POSICAO':
             position = posicao(root, int(argument))
@@ -186,7 +206,7 @@ if __name__ == "__main__":
             if position:
                 print(f'Posição do elemento {argument} -> {position}')
             else:
-                print(f'ERRO: O elemento {int(argument)} não está na árvore.')
+                print(f'>>> ERRO: O elemento {int(argument)} não está na árvore.')
 
         elif command_ == 'MEDIANA':
             print(f'Elemento da posição mediana -> {mediana(root)}')
@@ -202,11 +222,11 @@ if __name__ == "__main__":
             to_string(root)
 
         elif command_ == 'INSIRA':
-            insira(root, Node(int(argument)))
-            print(f'O valor {argument} foi adicionado!')
+            flag = insira(root, Node(int(argument)))
+            if flag:
+                print(f'O valor {argument} foi adicionado!')
 
         else:
             print('Nenhum comando correspondente encontrado!')
 
         print('')
-    inorder(root)
