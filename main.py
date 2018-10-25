@@ -11,24 +11,39 @@ class Node:
 def insira(root, node):
     exists = True
     if root.data == node.data:
-        raise(f'Valor duplicado: {root.data}')
+        print(f'Valor duplicado: {root.data}')
         return False
+
     elif root.data < node.data:
         if root.right is None:
             root.right = node
             node.parent = root
+
         else:
             exists = insira(root.right, node)
+
+
         if exists: root.right_nodes += 1
         return exists
+
     else:
         if root.left is None:
             root.left = node
             node.parent = root
+
         else:
             exists = insira(root.left, node)
+
+
         if exists: root.left_nodes += 1
         return exists
+
+
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.data)
+        inorder(root.right)
 
 
 def count_node(root):
@@ -44,50 +59,59 @@ def get_height(node):
 
     if node.left and node.right:
         return 1 + max(get_height(node.left), get_height(node.right))
+
     elif node.left:
         return 1 + get_height(node.left)
+
     elif node.right:
         return 1 + get_height(node.right)
+
     else:
         return 1
 
 
 def enesimo_elemento(root, n):
-    if not root or n <= 0 or n > count_node(root):
+    size = root.left_nodes + root.right_nodes + 1
+
+    if not root or n <= 0 or n > size:
         return None
 
-    left_count = 0 if not root.left else count_node(root.left)
 
-    if n <= left_count:
+    if n <= root.left_nodes:
         return enesimo_elemento(root.left, n)
 
-    elif n == left_count + 1:
+    elif n == root.left_nodes + 1:
         return root
 
     else:
-        return enesimo_elemento(root.right, n - left_count - 1)
+        return enesimo_elemento(root.right, n - root.left_nodes - 1)
 
 
-def posicao(x):
-    if not x:
-        return None
+def posicao(root, x):
+    current = root
+    s = []
+    done = 0
+    count = 1
 
-    index = 0
-    cur = x
-    prev = None
+    while(not done):
+        if current is not None:
+            s.append(current)
+            current = current.left
+        else:
+            if(len(s) > 0):
+                current = s.pop()
+                if current.data == x:
+                    return count
+                current = current.right
+                count += 1
+            else:
+                done = 1
 
-    while cur:
-        if not prev or prev == cur.right:
-            index += 1 + (0 if not cur.left else count_node(cur.left))
-
-        prev = cur
-        cur = cur.parent
-
-    return index
+    return 0
 
 
 def mediana(root):
-    size = count_node(root)
+    size = root.left_nodes + root.right_nodes + 1
     med = 0
     if size % 2 == 0:
         med = size // 2
@@ -99,14 +123,14 @@ def mediana(root):
 
 def eh_cheia(root):
     h = get_height(root)
-    size = count_node(root)
+    size = root.left_nodes + root.right_nodes + 1
 
     return size == ((2 ** h) - 1)
 
 
 def eh_completa(root):
     h = get_height(root)
-    size = count_node(root)
+    size = root.left_nodes + root.right_nodes + 1
 
     return (2 ** (h - 1)) <= size <= ((2 ** h) - 1)
 
@@ -141,21 +165,28 @@ if __name__ == "__main__":
     values = list(map(int, inputs.readline().split(' ')))
     root = Node(values.pop(0))
 
+    nodes = [Node(value) for value in values]
+    inserir(root, nodes)
+
     commands = open("commands.txt", "r")
     for index, command in enumerate(commands):
         command_, argument = command.replace('\n', ' ').split(' ', 1)
-        print(f'Comando: {command_} - Argumento(s): {argument}')
-
-        nodes = [Node(value) for value in values]
-        if index == 0 and command != 'INSIRA':
-            inserir(root, nodes)
+        print(f'COMANDO: {command_} - Argumento(s): {argument}')
 
         if command_ == 'ENESIMO':
-            print(f'Elemento na posição {argument} -> {enesimo_elemento(root, int(argument)).data}')
+            no = enesimo_elemento(root, int(argument))
+            if no:
+                print(f'Elemento na posição {argument} -> {no.data}')
+            else:
+                print(f'ERRO: A arvore não possui um {argument}° elemento')
 
         elif command_ == 'POSICAO':
-            node_posicao = [node for node in nodes if node.data == int(argument)]
-            print(f'Posição do elemento {argument} -> {posicao(node_posicao[0])}')
+            position = posicao(root, int(argument))
+
+            if position:
+                print(f'Posição do elemento {argument} -> {position}')
+            else:
+                print(f'ERRO: O elemento {int(argument)} não está na árvore.')
 
         elif command_ == 'MEDIANA':
             print(f'Elemento da posição mediana -> {mediana(root)}')
@@ -171,8 +202,11 @@ if __name__ == "__main__":
             to_string(root)
 
         elif command_ == 'INSIRA':
-            inserir(root, values)
-            print('Os valores foram adicionados!')
+            insira(root, Node(int(argument)))
+            print(f'O valor {argument} foi adicionado!')
 
         else:
             print('Nenhum comando correspondente encontrado!')
+
+        print('')
+    inorder(root)
