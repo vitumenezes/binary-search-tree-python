@@ -13,30 +13,32 @@ def removerNo(root, data):
     if not root:
         return None
 
-    if data < root.data:  # data is in the left sub tree.
+    if data < root.data:  
         root.left = removerNo(root.left, data)
-    elif data > root.data: # data is in the right sub tree.
+    elif data > root.data: 
         root.right = removerNo(root.right, data)
     else:
-        # case 1: no children
+        
         if root.left is None and root.right is None:
             root = None
-        #case 2: one child (right)
+        
         elif root.left is None:
-            temp = root # save current node as a backup
+            temp = root 
             root = root.right
 
-        # case 3: one child (left)
+        
         elif root.right is None:
-            temp = root # save current node as a backup
+            temp = root 
             root = root.left
-        # case 4: two children
+        
         else:
-            temp = min_value(root, root.right) # find minimal value of right sub tree
-            root.data = temp.data # duplicate the node
-            root.right = removerNo(root.right, temp.data) # delete the duplicate node
+            temp = min_value(root, root.right) 
+            root.data = temp.data 
+            root.right = removerNo(root.right, temp.data) 
+        
+		atualiza_nos()
 
-    return root # parent node can update reference
+    return root 
 
 
 def min_value(root, node):
