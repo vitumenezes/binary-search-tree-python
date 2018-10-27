@@ -6,37 +6,46 @@ class Node:
         self.right = None
         self.left_nodes = 0
         self.right_nodes = 0
-        self.parent = None
         self.data = key
 
-def menorValorNo(node):
-	current = node
-	while(current.left is not None):
-		current = current.left
-	return current
 
-def remover(root, node):
-	if root is None:
-		return root
-	if node < root.node:
-		root.left = remover(root.left, key)
-	elif(node > root.node):
-		root.right = remover(root.right, key)
-	else:
-		if root.letf is None:
-			temp = root.right
-			root = None
-			return temp
+def removerNo(root, data):
+    if not root:
+        return None
 
-		elif root.right is None:
-			temp = root.letf
-			root = None
-			return temp
-		temp = 	menorValorNo(root.right)
-		root.node = temp.node
-		root.right = remover(root.right, temp.node)
-	return root		
+    if data < root.data:  # data is in the left sub tree.
+        root.left = removerNo(root.left, data)
+    elif data > root.data: # data is in the right sub tree.
+        root.right = removerNo(root.right, data)
+    else:
+        # case 1: no children
+        if root.left is None and root.right is None:
+            root = None
+        #case 2: one child (right)
+        elif root.left is None:
+            temp = root # save current node as a backup
+            root = root.right
 
+        # case 3: one child (left)
+        elif root.right is None:
+            temp = root # save current node as a backup
+            root = root.left
+        # case 4: two children
+        else:
+            temp = min_value(root, root.right) # find minimal value of right sub tree
+            root.data = temp.data # duplicate the node
+            root.right = removerNo(root.right, temp.data) # delete the duplicate node
+
+    return root # parent node can update reference
+
+
+def min_value(root, node):
+    if root == None:
+        print("Árvore vazia!")
+    else:
+        while(node.left != None):
+            node = node.left
+        return (node)
 
 
 def insira(root, node):
@@ -48,7 +57,6 @@ def insira(root, node):
     elif root.data < node.data:
         if root.right is None:
             root.right = node
-            node.parent = root
 
         else:
             exists = insira(root.right, node)
@@ -60,7 +68,6 @@ def insira(root, node):
     else:
         if root.left is None:
             root.left = node
-            node.parent = root
 
         else:
             exists = insira(root.left, node)
@@ -69,6 +76,17 @@ def insira(root, node):
         if exists: root.left_nodes += 1
         return exists
 
+
+def atualiza_nos(root):
+    root.left_nodes = 0
+    root.right_nodes = 0
+
+    if root.right:
+        root.right_nodes += atualiza_nos(root.right)
+    if root.left:
+         root.left_nodes += atualiza_nos(root.left)
+
+    return root.left_nodes + root.right_nodes + 1
 
 def inorder(root):
     if root:
@@ -247,7 +265,9 @@ if __name__ == "__main__":
             flag = insira(root, Node(int(argument)))
             if flag:
                 print(f'O valor {argument} foi adicionado!')
-
+        elif command_ == 'REMOVA':
+            node = removerNo(root, int(argument))
+            print(node.data)
         else:
             print('Nenhum comando correspondente encontrado!')
 
