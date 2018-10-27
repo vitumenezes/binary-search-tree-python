@@ -9,6 +9,35 @@ class Node:
         self.parent = None
         self.data = key
 
+def menorValorNo(node):
+	current = node
+	while(current.left is not None):
+		current = current.left
+	return current
+
+def remover(root, node):
+	if root is None:
+		return root
+	if node < root.node:
+		root.left = remover(root.left, key)
+	elif(node > root.node):
+		root.right = remover(root.right, key)
+	else:
+		if root.letf is None:
+			temp = root.right
+			root = None
+			return temp
+
+		elif root.right is None:
+			temp = root.letf
+			root = None
+			return temp
+		temp = 	menorValorNo(root.right)
+		root.node = temp.node
+		root.right = remover(root.right, temp.node)
+	return root		
+
+
 
 def insira(root, node):
     exists = True
@@ -46,13 +75,6 @@ def inorder(root):
         inorder(root.left)
         print(root.data)
         inorder(root.right)
-
-
-def count_node(root):
-    if not root:
-        return 0
-
-    return 1 + count_node(root.left) + count_node(root.right)
 
 
 def get_height(node):
