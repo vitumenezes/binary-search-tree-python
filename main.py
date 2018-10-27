@@ -88,6 +88,7 @@ def atualiza_nos(root):
 
     return root.left_nodes + root.right_nodes + 1
 
+
 def inorder(root):
     if root:
         inorder(root.left)
@@ -170,11 +171,21 @@ def eh_cheia(root):
     return size == ((2 ** h) - 1)
 
 
-def eh_completa(root):
-    h = get_height(root)
-    size = root.left_nodes + root.right_nodes + 1
+def eh_completa(root, index):
+    # An empty is complete
+    if root is None:
+        return True
 
-    return (2 ** (h - 1)) <= size <= ((2 ** h) - 1)
+    n_nodes = root.left_nodes + root.right_nodes + 1
+    # If index assigned to current nodes is more than
+    # number of nodes in tree, then tree is not complete
+    if index >= number_nodes :
+        return False
+
+    # Recur for left and right subtress
+    return (eh_completa(root.left , 2*index+1 , n_nodes)
+        and eh_completa(root.right, 2*index+2, n_nodes)
+          )
 
 
 def to_string(root):
