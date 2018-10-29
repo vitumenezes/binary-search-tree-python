@@ -13,32 +13,30 @@ def removerNo(root, data):
     if not root:
         return None
 
-    if data < root.data:  
+    if data < root.data:
         root.left = removerNo(root.left, data)
-    elif data > root.data: 
+    elif data > root.data:
         root.right = removerNo(root.right, data)
     else:
-        
+
         if root.left is None and root.right is None:
             root = None
-        
+
         elif root.left is None:
-            temp = root 
+            temp = root
             root = root.right
 
-        
-        elif root.right is None:
-            temp = root 
-            root = root.left
-        
-        else:
-            temp = min_value(root, root.right) 
-            root.data = temp.data 
-            root.right = removerNo(root.right, temp.data) 
-        
-		atualiza_nos()
 
-    return root 
+        elif root.right is None:
+            temp = root
+            root = root.left
+
+        else:
+            temp = min_value(root, root.right)
+            root.data = temp.data
+            root.right = removerNo(root.right, temp.data)
+
+    return root
 
 
 def min_value(root, node):
@@ -278,10 +276,20 @@ if __name__ == "__main__":
             flag = insira(root, Node(int(argument)))
             if flag:
                 print(f'O valor {argument} foi adicionado!')
+
         elif command_ == 'REMOVA':
-            node = removerNo(root, int(argument))
-            print(node.data)
+            aux = root
+            print("valor da aux:", aux.data)
+            root = removerNo(root, int(argument))
+            atualiza_nos(root)
+            print("valor da aux 2:", aux.data)
+            print(aux.data, root.data)
+            if (aux.left_nodes + aux.right_nodes) == (root.left_nodes + root.right_nodes):
+                print(f'>>> ERRO: O valor {argument} não existe na árvore')
+            print(root.data)
         else:
             print('Nenhum comando correspondente encontrado!')
 
         print('')
+    inorder(root)
+    print(root.left_nodes, root.right_nodes)
