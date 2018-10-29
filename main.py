@@ -1,4 +1,5 @@
 import sys
+import copy
 
 class Node:
     def __init__(self, key):
@@ -9,14 +10,14 @@ class Node:
         self.data = key
 
 
-def removerNo(root, data):
+def remover_no(root, data):
     if not root:
         return None
 
     if data < root.data:
-        root.left = removerNo(root.left, data)
+        root.left = remover_no(root.left, data)
     elif data > root.data:
-        root.right = removerNo(root.right, data)
+        root.right = remover_no(root.right, data)
     else:
 
         if root.left is None and root.right is None:
@@ -34,7 +35,7 @@ def removerNo(root, data):
         else:
             temp = min_value(root, root.right)
             root.data = temp.data
-            root.right = removerNo(root.right, temp.data)
+            root.right = remover_no(root.right, temp.data)
 
     return root
 
@@ -171,19 +172,18 @@ def eh_cheia(root):
     return size == ((2 ** h) - 1)
 
 
-def eh_completa(root, index):
+def eh_completa(root, index, n_nodes):
     # An empty is complete
     if root is None:
         return True
 
-    n_nodes = root.left_nodes + root.right_nodes + 1
     # If index assigned to current nodes is more than
     # number of nodes in tree, then tree is not complete
-    if index >= number_nodes :
+    if index >= n_nodes :
         return False
 
     # Recur for left and right subtress
-    return (eh_completa(root.left , 2*index+1 , n_nodes)
+    return (eh_completa(root.left , 2*index+1, n_nodes)
         and eh_completa(root.right, 2*index+2, n_nodes)
           )
 
@@ -266,7 +266,8 @@ if __name__ == "__main__":
             print(f'Árvore é cheia? -> {eh_cheia(root)}')
 
         elif command_ == 'COMPLETA':
-            print(f'Árvore é completa? -> {eh_completa(root)}')
+            n_nodes = root.left_nodes + root.right_nodes + 1
+            print(f'Árvore é completa? -> {eh_completa(root, 0, n_nodes)}')
 
         elif command_ == 'IMPRIMA':
             print('Valores da árvore por níveis:')
@@ -278,15 +279,23 @@ if __name__ == "__main__":
                 print(f'O valor {argument} foi adicionado!')
 
         elif command_ == 'REMOVA':
-            aux = root
-            print("valor da aux:", aux.data)
-            root = removerNo(root, int(argument))
+            aux = copy.copy(root)
+            print("aux values: ", aux.data)
+            print("aux values: ", aux.left_nodes)
+            print("aux values: ", aux.right_nodes)
+            print("aux values: ", aux.left)
+            print("aux values: ", aux.right)
+            root = remover_no(root, int(argument))
             atualiza_nos(root)
-            print("valor da aux 2:", aux.data)
-            print(aux.data, root.data)
+            print("root values: ",root.data)
+            print("root values: ",root.left_nodes)
+            print("root values: ",root.right_nodes)
+            print("root values: ",root.left)
+            print("root values: ",root.right)
             if (aux.left_nodes + aux.right_nodes) == (root.left_nodes + root.right_nodes):
                 print(f'>>> ERRO: O valor {argument} não existe na árvore')
-            print(root.data)
+            else:
+                print(f'O valor {argument} foi removido com sucesso!')
         else:
             print('Nenhum comando correspondente encontrado!')
 
