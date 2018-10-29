@@ -16,10 +16,10 @@ python3.6 main.py "arquivo de entrada de valores" "arquivo com os comandos"
 
 O arquivo de entrada de dados deve ter os números escritos separados por espaço, e o dos comandos com as instruçoes separadas por linhas, com os argumentos de cada separados por espaço.
 
-### Exemplo
-
+## Exemplo de execução
+```
 python3.6 main.py input.txt commands.txt
-
+```
 ### input.txt
 
 ```
