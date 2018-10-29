@@ -14,7 +14,7 @@ python3.6 main.py "arquivo de entrada de valores" "arquivo com os comandos"
 
 É necessário que seja nesta ordem, com os arquivos formatados da maneira que estavam na descrição do trabalho.
 
-O arquivo de entrada de dados deve ter os números escritos separados por espaço, e o dos comandos com as instruçoes separadas por linhas, com os argumentos de cada separados por espaço.
+O arquivo de entrada de dados deve ter os números escritos separados por espaço, e o dos comandos com as instruçoes separadas por linhas, e argumentos separados por espaço.
 
 ## Exemplo de execução
 ```
