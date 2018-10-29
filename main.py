@@ -268,18 +268,8 @@ if __name__ == "__main__":
 
         elif command_ == 'REMOVA':
             aux = copy.copy(root)
-            print("aux values: ", aux.data)
-            print("aux values: ", aux.left_nodes)
-            print("aux values: ", aux.right_nodes)
-            print("aux values: ", aux.left)
-            print("aux values: ", aux.right)
             root = remover_no(root, int(argument))
             atualiza_nos(root)
-            print("root values: ",root.data)
-            print("root values: ",root.left_nodes)
-            print("root values: ",root.right_nodes)
-            print("root values: ",root.left)
-            print("root values: ",root.right)
             if (aux.left_nodes + aux.right_nodes) == (root.left_nodes + root.right_nodes):
                 print(f'>>> ERRO: O valor {argument} não existe na árvore')
             else:
