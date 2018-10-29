@@ -10,6 +10,18 @@ class Node:
         self.data = key
 
 
+def busca_binaria(root, value):
+    if not root:
+        return False
+
+    if root.data == value:
+        return True
+    elif root.data > value:
+        return busca_binaria(root.right, value)
+    else:
+        return busca_binaria(root.left, value)
+
+
 def remover_no(root, data):
     if not root:
         return None
@@ -274,5 +286,13 @@ if __name__ == "__main__":
                 print(f'>>> ERRO: O valor {argument} não existe na árvore')
             else:
                 print(f'O valor {argument} foi removido com sucesso!')
+
+        elif command_ == 'BUSCA':
+            flag = busca_binaria(root, int(argument))
+            if flag:
+                print(f'O valor {argument} se encontra na árvore.')
+            else:
+                print(f'O valor {argument} NÃO encontra na árvore.')
+
         else:
             print('Nenhum comando correspondente encontrado!')
