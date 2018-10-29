@@ -28,6 +28,19 @@ python3.6 main.py input.txt commands.txt
 
 ### commands.txt
 
+Comandos:
+* ENESIMO N
+* POSICAO N
+* MEDIANA
+* CHEIA
+* COMPLETA
+* IMPRIMA
+* REMOVA N
+* INSIRA N
+* BUSCA N
+
+Como deve estar no arquivo:
+
 ```
 IMPRIMA
 INSIRA 28
