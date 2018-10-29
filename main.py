@@ -90,13 +90,6 @@ def atualiza_nos(root):
     return root.left_nodes + root.right_nodes + 1
 
 
-def inorder(root):
-    if root:
-        inorder(root.left)
-        print(root.data)
-        inorder(root.right)
-
-
 def get_height(node):
     if not node:
         return 0
@@ -173,19 +166,14 @@ def eh_cheia(root):
 
 
 def eh_completa(root, index, n_nodes):
-    # An empty is complete
     if root is None:
         return True
 
-    # If index assigned to current nodes is more than
-    # number of nodes in tree, then tree is not complete
     if index >= n_nodes :
         return False
 
-    # Recur for left and right subtress
     return (eh_completa(root.left , 2*index+1, n_nodes)
-        and eh_completa(root.right, 2*index+2, n_nodes)
-          )
+        and eh_completa(root.right, 2*index+2, n_nodes))
 
 
 def to_string(root):
@@ -298,7 +286,3 @@ if __name__ == "__main__":
                 print(f'O valor {argument} foi removido com sucesso!')
         else:
             print('Nenhum comando correspondente encontrado!')
-
-        print('')
-    inorder(root)
-    print(root.left_nodes, root.right_nodes)
